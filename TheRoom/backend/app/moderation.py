@@ -17,7 +17,10 @@ HF_API_TOKEN = os.getenv("HF_API_TOKEN", "")
 
 TOXIC_BERT_MODEL = "unitary/toxic-bert"
 MARTIN_HA_MODEL = "martin-ha/toxic-comment-model"
-HF_INFERENCE_URL = "https://api-inference.huggingface.co/models/{model}"
+# HF retired the legacy api-inference.huggingface.co host in 2025 — serverless
+# inference now goes through the router, with the hf-inference provider path
+# preserving the same classic text-classification response shape.
+HF_INFERENCE_URL = "https://router.huggingface.co/hf-inference/models/{model}"
 
 # Curated, deliberately not exhaustive: catches direct, unambiguous crisis
 # language. False negatives are acceptable (the composer isn't the only

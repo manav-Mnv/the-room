@@ -11,6 +11,13 @@ from __future__ import annotations
 
 import logging
 
+from dotenv import load_dotenv
+
+# Must run before the `moderation`/`supabase_client` imports below — both read
+# their config from `os.environ`/`os.getenv` at import time. In production
+# (Railway/Render) env vars are set in the host dashboard and this is a no-op.
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
