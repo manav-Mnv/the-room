@@ -100,6 +100,10 @@ enum ReactionStore {
         UserDefaults.standard.set(Array(ids), forKey: key)
     }
 
+    static func clearAll() {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+
     private static var reactedIDs: Set<String> {
         Set(UserDefaults.standard.stringArray(forKey: key) ?? [])
     }

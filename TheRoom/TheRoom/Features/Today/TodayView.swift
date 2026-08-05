@@ -51,6 +51,17 @@ struct TodayView: View {
         .navigationDestination(isPresented: $showBreathe) {
             BreatheHomeView()
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(Theme.textSecondary)
+                }
+                .accessibilityLabel("Settings")
+            }
+        }
     }
 
     private var header: some View {

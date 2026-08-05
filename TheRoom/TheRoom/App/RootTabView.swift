@@ -4,6 +4,7 @@ import SwiftUI
 /// crisis-support affordance reachable from every tab.
 struct RootTabView: View {
     @State private var showCrisis = false
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     var body: some View {
         TabView {
@@ -31,6 +32,9 @@ struct RootTabView: View {
                         .crisisToolbarButton(isPresented: $showCrisis)
                 }
             }
+        }
+        .fullScreenCover(isPresented: .init(get: { !hasCompletedOnboarding }, set: { _ in })) {
+            OnboardingView { hasCompletedOnboarding = true }
         }
     }
 }
