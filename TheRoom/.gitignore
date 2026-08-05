@@ -9,3 +9,8 @@ DerivedData/
 
 # macOS
 .DS_Store
+
+# Secrets — never commit real backend credentials.
+backend/.env
+*.env
+!.env.example
