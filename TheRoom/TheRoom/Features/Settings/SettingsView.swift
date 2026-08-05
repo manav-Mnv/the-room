@@ -92,6 +92,12 @@ struct SettingsView: View {
                     .foregroundStyle(Theme.textMuted)
             }
 
+            #if DEBUG
+            Section("Demo (debug builds only)") {
+                Button("Inject 7-day streak") { injectDemoStreak() }
+            }
+            #endif
+
             Section {
                 Text("The Room · v1.0 · made with 🫀 in India")
                     .font(.caption)
@@ -126,6 +132,25 @@ struct SettingsView: View {
         ReactionStore.clearAll()
         didDeleteData = true
     }
+
+    #if DEBUG
+    /// Backfills 7 consecutive days of check-ins (today back to 6 days ago) so a
+    /// demo device shows a believable streak without a week of real use.
+    private func injectDemoStreak() {
+        let calendar = Calendar.current
+        for offset in 0..<7 {
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: .now) else { continue }
+            let startOfDay = calendar.startOfDay(for: date)
+            let alreadyExists = (try? modelContext.fetch(
+                FetchDescriptor<MoodEntry>(predicate: #Predicate { $0.date == startOfDay })
+            ))?.isEmpty == false
+            guard !alreadyExists else { continue }
+            let level = [3, 4, 5, 4, 5, 4, 5][offset]
+            modelContext.insert(MoodEntry(date: date, level: level))
+        }
+        try? modelContext.save()
+    }
+    #endif
 }
 
 enum AppearanceOption: String, CaseIterable, Identifiable {
