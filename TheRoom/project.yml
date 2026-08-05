@@ -66,6 +66,16 @@ targets:
     platform: iOS
     sources:
       - path: TheRoomWidget
+      # Shared with the app target so the widget can read/write the same
+      # App-Group-backed SwiftData store and reuse pure logic + theme.
+      - path: TheRoom/Models
+        group: Shared/Models
+      - path: TheRoom/DesignSystem/Theme.swift
+        group: Shared/DesignSystem
+      - path: TheRoom/Services/AppModelContainer.swift
+        group: Shared/Services
+      - path: TheRoom/Services/StreakCalculator.swift
+        group: Shared/Services
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.man.TheRoom.TheRoomWidget
