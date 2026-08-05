@@ -19,10 +19,12 @@ struct RoomFeedView: View {
             VStack(spacing: Theme.Spacing.lg) {
                 SectionHeader(title: "The Room", subtitle: "Anonymous · moderated · you're not alone here")
 
-                if !RoomConfig.isConfigured {
+                if !RoomConfig.isSupabaseConfigured {
                     NotConfiguredNotice()
                 } else if isOffline {
                     OfflineNotice()
+                } else if !RoomConfig.isModerationConfigured {
+                    PostingNotYetAvailableNotice()
                 }
 
                 if posts.isEmpty && !isLoading {
@@ -43,7 +45,7 @@ struct RoomFeedView: View {
         .refreshable { await load() }
         .task { await load() }
         .safeAreaInset(edge: .bottom) {
-            ComposerBar(isEnabled: RoomConfig.isConfigured && !isOffline) { showComposer = true }
+            ComposerBar(isEnabled: RoomConfig.isModerationConfigured && !isOffline) { showComposer = true }
         }
         .sheet(isPresented: $showComposer) {
             ComposerSheet(onApproved: {
@@ -182,6 +184,16 @@ private struct NotConfiguredNotice: View {
     var body: some View {
         RoomCard(background: Theme.bgElevated) {
             Text("The Room feed isn't connected to a server yet.")
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
+        }
+    }
+}
+
+private struct PostingNotYetAvailableNotice: View {
+    var body: some View {
+        RoomCard(background: Theme.bgElevated) {
+            Text("Reading is live — posting opens once the moderation service is deployed.")
                 .font(.caption)
                 .foregroundStyle(Theme.textSecondary)
         }

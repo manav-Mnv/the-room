@@ -11,17 +11,25 @@ enum RoomConfig {
     static let moderationBaseURL = URL(string: "https://REPLACE-ME.example.com")!
 
     /// e.g. "https://your-project.supabase.co"
-    static let supabaseURL = URL(string: "https://REPLACE-ME.supabase.co")!
+    static let supabaseURL = URL(string: "https://piihnnffmfyyslkwsgvo.supabase.co")!
 
     /// The anon/public key from Supabase Settings -> API. Never the service role key.
-    static let supabaseAnonKey = "REPLACE-ME"
+    static let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpaWhubmZmbWZ5eXNsa3dzZ3ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NTI1MzYsImV4cCI6MjEwMTUyODUzNn0._w-CWqxqvQ9hZTzj79emicZZK4rbZeQRiHE3JNMrtUs"
 
-    /// True while `moderationBaseURL`/`supabaseURL` are still placeholders — used to
-    /// short-circuit network calls with a friendly "not configured yet" state instead
-    /// of spamming failed requests against a fake URL.
-    static var isConfigured: Bool {
+    /// True once real Supabase values are set — gates feed reads + reactions,
+    /// which don't need the moderation backend to be deployed.
+    static var isSupabaseConfigured: Bool {
+        !supabaseURL.absoluteString.contains("REPLACE-ME") && supabaseAnonKey != "REPLACE-ME"
+    }
+
+    /// True once the moderation backend is deployed and its URL is set — gates
+    /// posting, since writes must never bypass the moderation gate.
+    static var isModerationConfigured: Bool {
         !moderationBaseURL.absoluteString.contains("REPLACE-ME")
-            && !supabaseURL.absoluteString.contains("REPLACE-ME")
-            && supabaseAnonKey != "REPLACE-ME"
+    }
+
+    /// True only once everything is wired up (reads + writes both possible).
+    static var isConfigured: Bool {
+        isSupabaseConfigured && isModerationConfigured
     }
 }

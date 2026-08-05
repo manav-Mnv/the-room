@@ -17,6 +17,8 @@
 
 ---
 
+**6 Aug 2026 — Supabase live, moderation backend not yet deployed.** User provided real Supabase project URL + anon key (service key and HF token also given, stored only in gitignored `backend/.env`, never committed — a real secret-leak near-miss happened here: user first pasted them into the *tracked* `.env.example`, caught before commit, `backend/.env` added to `.gitignore`). Wired `supabaseURL`/`supabaseAnonKey` into `RoomConfig.swift`. Split `RoomConfig.isConfigured` into `isSupabaseConfigured` (gates feed reads + reactions) and `isModerationConfigured` (gates posting, still false — `moderationBaseURL` is still a placeholder) so the feed can read live Supabase data now, with posting disabled and a "reading is live, posting opens once deployed" notice, rather than gating everything on the one field that isn't set yet. **Next:** deploy `backend/` (Railway/Render, see `backend/README.md`) using the `.env` values already sitting there, run `python seed.py`, then drop the deployed URL into `RoomConfig.moderationBaseURL`.
+
 ## 2. 🚨 OPEN BLOCKERS (resolve before/while building)
 
 1. **MAC ACCESS — critical, unresolved.** Dev machine is **Windows** (`M:\indehub`). iOS apps cannot be built/run/recorded on Windows — Xcode is macOS-only. Need a Mac (own / friend / college lab / cloud Mac like MacinCloud ~$20/mo) before the Aug 7 deadline for compile + demo recording. Claude Code can write Swift on Windows; the .swift files transfer to a Mac to build. **This must be solved.**

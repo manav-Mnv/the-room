@@ -11,7 +11,7 @@ enum FeedAPI {
     }
 
     static func fetchPosts() async -> Result<[Post], FeedError> {
-        guard RoomConfig.isConfigured else { return .failure(.notConfigured) }
+        guard RoomConfig.isSupabaseConfigured else { return .failure(.notConfigured) }
 
         var components = URLComponents(url: RoomConfig.supabaseURL.appending(path: "rest/v1/posts"), resolvingAgainstBaseURL: false)!
         components.queryItems = [
@@ -41,7 +41,7 @@ enum FeedAPI {
     /// Increments the me-too counter via the `increment_metoo` RPC. The caller is
     /// responsible for checking `ReactionStore` first so this only fires once per post.
     static func react(to postID: UUID) async {
-        guard RoomConfig.isConfigured else { return }
+        guard RoomConfig.isSupabaseConfigured else { return }
         var request = URLRequest(url: RoomConfig.supabaseURL.appending(path: "rest/v1/rpc/increment_metoo"))
         request.httpMethod = "POST"
         request.setValue(RoomConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")

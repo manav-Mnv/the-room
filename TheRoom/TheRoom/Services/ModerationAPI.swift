@@ -15,7 +15,7 @@ enum ModerationAPI {
     }
 
     static func submit(text: String) async -> Result<SubmitResponse, SubmitError> {
-        guard RoomConfig.isConfigured else { return .failure(.notConfigured) }
+        guard RoomConfig.isModerationConfigured else { return .failure(.notConfigured) }
 
         var request = URLRequest(url: RoomConfig.moderationBaseURL.appending(path: "confession/submit"))
         request.httpMethod = "POST"
