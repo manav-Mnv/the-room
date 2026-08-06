@@ -7,8 +7,7 @@ import Foundation
 /// Safe to commit: the Supabase key here must always be the **anon** key
 /// (SELECT-only via RLS, see `backend/schema.sql`), never the service key.
 enum RoomConfig {
-    /// e.g. "https://the-room-moderation.up.railway.app"
-    static let moderationBaseURL = URL(string: "https://REPLACE-ME.example.com")!
+    static let moderationBaseURL = URL(string: "https://the-room-backend.onrender.com")!
 
     /// e.g. "https://your-project.supabase.co"
     static let supabaseURL = URL(string: "https://piihnnffmfyyslkwsgvo.supabase.co")!
