@@ -6,6 +6,13 @@ into Supabase. Reads never touch this service — the iOS app reads `posts`
 directly from Supabase with the anon key (SELECT-only via RLS, see
 `schema.sql`).
 
+`runtime.txt` pins Python to 3.11 — `pydantic-core` doesn't ship prebuilt
+wheels for newer interpreters yet, and hosts that default to a bleeding-edge
+Python (Render currently defaults new services to 3.14) fail to build it from
+source because their build filesystem is read-only where the Rust build
+(`maturin`) needs to write its cache. Don't remove this pin without confirming
+the deploy host's default Python has wheels for every pinned dependency.
+
 ## Setup
 
 1. Create a Supabase project, run `schema.sql` in its SQL editor.
